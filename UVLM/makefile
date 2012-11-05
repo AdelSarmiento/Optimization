@@ -2,7 +2,7 @@ SRC=global.f90 ANGLES.f90 BSL_SYM.f90 PERFORMANCE.f90 CONNECT_WAKE.f90 PLOT_PRES
 
 FC  = gfortran
 LIB = -llapack
-FFLAGS = -pg
+FFLAGS = -O3
 
 OBJ=${SRC:.f90=.o}
 
@@ -13,5 +13,10 @@ OBJ=${SRC:.f90=.o}
 code: ${OBJ}
 	${FC} -o $@ $^ ${FFLAGS} ${LIB}
 
+prof: code
+	./code -pg
+	gprof code > a.out
+	open a.out
+
 clean:
-	rm -f ${OBJ} code *.o *~ *.mod
+	rm -f ${OBJ} code *.o *~ *.mod *.dat
